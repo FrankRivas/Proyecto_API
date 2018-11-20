@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %}
+
+{% block content %}
+    <h4><center>Inspeccion Realizada</center></h4>
+        <form action="" method="POST" class="viewform">
+            {% csrf_token %}
+            {% form form=form %}
+                {% part form.plan prefix %}<i class="material-icons prefix">account_balance</i>{% endpart %}
+                {% part form.control prefix %}<i class="material-icons prefix">date_range</i>{% endpart %}
+                {% attr form.control 'group' class append %}fecha_1{% endattr %}
+                {% attr form.control 'widget' autocomplete  append %}off{% endattr %}
+                {% part form.empleado prefix %}<i class="material-icons prefix">work</i>{% endpart %}
+                {% part form.buenas_practicas prefix %}<i class="material-icons prefix"></i>{% endpart %}
+            {% endform %}
+
+            <button class="btn btn-view"  type="submit" name="action" >Actualizar
+                <i class="material-icons right">send</i>
+            </button>
+
+            <a class="btn btn-danger" href="{% url 'consultarInspecciones' %}" type="submit">Cancelar<i class="material-icons right">cancel</i></a>
+        </form>
+
+
+    {% block js %}
+        <script type="text/javascript">
+            $('input[name="control"]').mask('00/00/0000');
+
+        </script>
+
+
+        <script type="text/javascript">
+            $('input[name="control"]').dblclick(function() {
+                $('input[name="control"]').datepicker('show');
+            });
+            $('input[name="control"]').click(function() {
+                $('input[name="control"]').datepicker('hide');
+            });
+        </script>
+        <script type="text/javascript">
+            $('input[name="control"]').datepicker({
+                format: "dd/mm/yyyy",
+                todayBtn: "linked",
+                maxViewMode: 3,
+                autoclose: true,
+                language: "es",
+                daysOfWeekHighlighted: "0",
+                clearBtn: true,
+                todayHighlight: true,
+                orientation: "bottom auto",
+                container: "div.fecha_1"
+            });
+        </script>
+
+        <script type="text/javascript">
+            (function () { Materialize.toast('{{ mensaje }}', 4000, 'rounded') })();
+        </script>
+        <script type="text/javascript">
+            $(function(){
+                // turn the element to select2 select style
+                $('.select-search').select2();
+            });
+        </script>
+{% endblock %}
+
+{% endblock %}

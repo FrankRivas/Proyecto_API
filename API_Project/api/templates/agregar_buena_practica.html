@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %}
+{% block content %}
+<h4><center>Registrar Buena Práctica</center></h4>
+        <form action="" method="POST" class="viewform">
+            {% csrf_token %}
+            {% form form=form %}
+                {% part form.pregunta prefix %}<i class="material-icons prefix">settings</i>{% endpart %}
+                {% attr form.pregunta 'widget' style  append %}text-transform: capitalize;{% endattr %}
+                {% part form.descripcion prefix %}<i class="material-icons prefix">rate_review</i>{% endpart %}
+            {% endform %}
+            {% if actualizar == True %}
+                <button class="btn btn-view"  type="submit" name="action" >Actualizar
+                    <i class="material-icons right">send</i>
+                </button>
+
+                <a class="btn btn-danger" href="/buenas_practicas" type="submit">Cancelar
+                    <i class="material-icons right">cancel</i></a>
+
+            {% else %}
+
+                <button class="btn btn-primary"  type="submit" name="action" >Registrar
+                    <i class="material-icons right">send</i>
+                </button>
+
+            {% endif %}
+        </form>
+        {% if messages %}
+            {% for mensaje in messages %}
+                <script type="text/javascript">
+                    (function () { Materialize.toast('{{ mensaje }}', 4000, 'rounded') })();
+                </script>
+            {% endfor %}
+        {% endif %}
+
+{% endblock %}

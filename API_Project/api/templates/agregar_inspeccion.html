@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+<script src="{% static 'material/js/jquery.js' %}"></script>
+{% include 'material/includes/material_js.html' %}
+{% load material_form %}
+
+{% block content %}
+    <h4><center>Inspeccion de Buenas Prácticas de Laboratorio</center></h4>
+        <form action="" method="POST" class="viewform">
+            {% csrf_token %}
+
+            {% form form=inspeccion_form %}
+                {% part form.plan prefix %}<i class="material-icons prefix">account_balance</i>{% endpart %}
+                {% part form.control prefix %}<i class="material-icons prefix">date_range</i>{% endpart %}
+                {% attr form.control 'group' class append %}fecha_1{% endattr %}
+                {% attr form.control 'widget' autocomplete  append %}off{% endattr %}
+                {% part form.empleado prefix %}<i class="material-icons prefix">work</i>{% endpart %}
+                {% part form.buenas_practicas prefix %}<i class="material-icons prefix"></i>{% endpart %}
+
+
+            {% endform %}
+            <button class="btn btn-primary"  type="submit" name="action" >Registrar
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
+
+
+    {% block js %}
+        <script type="text/javascript">
+            $('input[name="inspeccion-control"]').mask('00/00/0000');
+
+        </script>
+
+
+
+        <script type="text/javascript">
+            $('input[name="inspeccion-control"]').dblclick(function() {
+                $('input[name="inspeccion-control"]').datepicker('show');
+            });
+            $('input[name="inspeccion-control"]').click(function() {
+                $('input[name="inspeccion-control"]').datepicker('hide');
+            });
+        </script>
+        <script type="text/javascript">
+            $('input[name="inspeccion-control"]').datepicker({
+                format: "dd/mm/yyyy",
+                todayBtn: "linked",
+                maxViewMode: 3,
+                autoclose: true,
+                language: "es",
+                daysOfWeekHighlighted: "0",
+                clearBtn: true,
+                todayHighlight: true,
+                orientation: "bottom auto",
+                container: "div.fecha_1"
+            });
+        </script>
+
+
+{% endblock %}
+
+
+{% endblock %}

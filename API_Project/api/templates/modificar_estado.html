@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+        <form method="post">
+            {% csrf_token %}
+            {% if msj == "activar" %}
+                <input type="hidden"  name="mensaje" readonly="readonly" value="activar">
+            {% elif not empleado.activo %}
+                <input type="hidden"  name="mensaje" readonly="readonly" value="desactivar">
+            {% endif %}
+            <span>Realmente desea </span>
+            <label value="{{ msj }}">{{ msj }}</label>
+            <span> el empleado: </span>
+            <p> </p>
+            <label style="font-size: 18px" for=""><b>Nombre: </b></label>
+            <input type="text"  class="form-control" readonly="readonly" value="{{ empleado.nombre|title }}">
+            <label style="font-size: 18px; " for="">Apellido: </label>
+            <input type="text" class="form-control" readonly="readonly" value="{{ empleado.apellido|title }}">
+            <a class="btn btn-primary" href="/expedientes" type="submit">Cancelar<i class="material-icons right">cancel</i> </a>
+            <a class="btn btn-danger" href="/desactivar_empleado/{{empleado.id}}" type="submit">Aceptar<i class="material-icons right">warning</i></a>
+        </form>
+
+{%endblock%}

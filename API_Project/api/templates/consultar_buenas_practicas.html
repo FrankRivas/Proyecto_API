@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+       <h4><center>Buenas Prácticas</center></h4>
+
+        <div class="consulta-tabla">
+        <table class="table table-striped table-bordered table-hover" data-toggle="bootgrid" id="planilla_table">
+            <thead>
+            <tr>
+                <th>Buena Práctica</th>
+                <th>Descripción</th>
+
+                    <th>Gestionar</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for buenas_practicas in buenas_practicas_list %}
+                <tr>
+                    <td>{{buenas_practicas.pregunta|title}}</td>
+                    <td>{{buenas_practicas.descripcion|title}}</td>
+
+
+                        <td>
+                            <a class="btn btn-primary" href="/actualizar_buena_practica/{{buenas_practicas.id}}"><i class="material-icons">edit</i></a>
+                        </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        {% if messages %}
+            {% for mensaje in messages %}
+                <script type="text/javascript">
+                    (function () { Materialize.toast('{{ mensaje }}', 4000, 'rounded') })();
+                </script>
+            {% endfor %}
+        {% endif %}
+
+
+{%endblock%}

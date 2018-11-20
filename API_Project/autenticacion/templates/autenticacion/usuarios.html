@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="col s12">
+        <h5>Consulta de Usuarios:</h5>
+    </div>
+    <div class="consulta-tabla">
+        <table class="table table-striped table-bordered table-hover" data-toggle="bootgrid" id="planilla_table">
+            <thead>
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Correo Electrónico</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Rol</th>
+                <th>¿Usuario Bloqueado?</th>
+                <th>Acciones</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in user_list %}
+                <tr>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.first_name|title}}</td>
+                    <td>{{user.last_name|title}}</td>
+                    <td>{{user.groups.first|title}}</td>
+
+                        {% if user.is_active %}
+                           <td style="text-align:center"><a class="btn btn-primary" href="/confirmar_desactivar_usuario/{{user.id}}"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a></td>
+                          {% else %}
+                           <td><a class="btn btn-danger" href="/confirmar_desactivar_usuario/{{user.id}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                           {% endif %}
+
+                    <td>
+
+                            <a class="btn btn-primary waves-effect waves-light" href="/actualizar_usuario/{{ user.id }}"><i class="material-icons">edit</i></a>
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% for user in user_list %}
+        <script type="text/javascript">
+            function Desbloquear{{ user.id }}(){
+                swal({   title: "¡Se {% if not user.is_active %}des{% endif %}bloqueará el usuario {{ user.username }}!",
+                        text: "¿Está seguro que desea continuar?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Sí, deseo continuar",
+                        cancelButtonText: "No, no estoy seguro",
+                        closeOnConfirm: false,
+                        closeOnCancel: false },
+                    function(isConfirm){
+                        if (isConfirm)
+                        {
+                            window.location.href = '{% url 'bloquear_usuario' pk=user.id %}';
+                        }
+                        else {
+                            swal("Cancelar", "¡Se canceló la operación!", "error");
+                        } });
+            }
+        </script>
+    {% endfor %}
+{%endblock%}

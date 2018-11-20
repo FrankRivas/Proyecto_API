@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% include 'material/includes/material_css.html' %}
+<script src="{% static 'material/js/jquery.js' %}"></script>
+{% include 'material/includes/material_js.html' %}
+{% load material_form %}
+{% block content %}
+
+        <form action="" method="post">{% csrf_token %}
+            {% form form=form %}
+                {% part form.nombre prefix %}<i class="material-icons prefix">account_box</i>{% endpart %}
+                {% attr form.nombre 'widget' style  append %}text-transform: capitalize;{% endattr %}
+                {% part form.apellido prefix %}<i class="material-icons prefix">account_box</i>{% endpart %}
+                {% attr form.apellido 'widget' style  append %}text-transform: capitalize;{% endattr %}
+                {% part form.dui prefix %}<i class="material-icons prefix">fingerprint</i>{% endpart %}
+                {% part form.nit prefix %}<i class="material-icons prefix">fingerprint</i>{% endpart %}
+                {% part form.fecha_nacimiento prefix %}<i class="material-icons prefix">date_range</i>{% endpart %}
+                {% attr form.fecha_nacimiento 'group' class append %}fecha_1{% endattr %}
+                {% attr form.fecha_nacimiento 'widget' autocomplete  append %}off{% endattr %}
+                {% part form.telefono prefix %}<i class="material-icons prefix">call</i>{% endpart %}
+                {% part form.estado_civil prefix %}<i class="material-icons prefix">loyalty</i>{% endpart %}
+                {% part form.sexo prefix %}<i class="material-icons prefix">wc</i>{% endpart %}
+                {% part form.direccion prefix %}<i class="material-icons prefix">home</i>{% endpart %}
+                {% part form.email prefix %}<i class="material-icons prefix">email</i>{% endpart %}
+            {% endform %}
+            <button class="btn btn-view">Actualizar
+                <i class="material-icons right">send</i>
+            </button>
+            <a class="btn btn-danger" href="/expedientes/">Cancelar<i class="material-icons right">cancel</i></a>
+        </form>
+{% block js %}
+        <script type="text/javascript">
+            $('input[name="dui"]').mask('00000000-0');
+            $('input[name="nit"]').mask('0000-000000-000-0');
+            $('input[name="telefono"]').mask('0000-0000');
+            $('input[name="fecha_nacimiento"]').mask('00/00/0000');
+        </script>
+
+        <script type="text/javascript">
+            $('input[name="fecha_nacimiento"]').dblclick(function() {
+                $('input[name="fecha_nacimiento"]').datepicker('show');
+            });
+            $('input[name="fecha_nacimiento"]').click(function() {
+                $('input[name="fecha_nacimiento"]').datepicker('hide');
+            });
+        </script>
+        <script type="text/javascript">
+            $('input[name="fecha_nacimiento"]').datepicker({
+                format: "dd/mm/yyyy",
+                todayBtn: "linked",
+                maxViewMode: 3,
+                autoclose: true,
+                language: "es",
+                daysOfWeekHighlighted: "0",
+                clearBtn: true,
+                todayHighlight: true,
+                orientation: "bottom auto",
+                container: "div.fecha_1"
+            });
+        </script>
+        <script type="text/javascript">
+            $(function(){
+                // turn the element to select2 select style
+                $('.select-search').select2();
+            });
+        </script>
+
+
+    {% endblock %}
+{% endblock %}
