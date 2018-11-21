@@ -162,7 +162,7 @@ def consultarExpedientes(request):
         if request.POST.get('fecha_desde'):
             desde = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%d de %B de %Y")
         else:
-            desde = "el origen de los tiempos"
+            desde = "Inicio de Transacciones"
         fecha_hasta = request.POST.get('fecha_hasta')
     else:
         g = True
@@ -184,8 +184,14 @@ def consultarExpedientes(request):
         b = request.POST.get('fecha_hasta')
         empleados_list = empleados_list.filter(expediente__fecha_apertura__lte=b[6:] + "-" + b[3:5] + "-" + b[:2])
 
+    context = {
+        'empleados_list': empleados_list,
+        'desde': desde,
+        'hasta': hasta,
+
+    }
     #empleados_list = Empleado.objects.all()
-    return render(request, 'expedientes.html', {'empleados_list': empleados_list, })
+    return render(request, 'expedientes.html', context)
 
 class EmpleadoUpdate(SuccessMessageMixin, UpdateView):
     model = Empleado
@@ -365,7 +371,7 @@ def reporteInspecciones(request):
         if request.POST.get('fecha_desde'):
             desde = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%d de %B de %Y")
         else:
-            desde = "el origen de los tiempos"
+            desde = "Inicio de Transacciones"
         fecha_hasta = request.POST.get('fecha_hasta')
     else:
         g = True
@@ -387,8 +393,15 @@ def reporteInspecciones(request):
         b = request.POST.get('fecha_hasta')
         inspeccion_list = inspeccion_list.filter(fecha__lte=b[6:] + "-" + b[3:5] + "-" + b[:2])
 
+    context = {
+        'inspeccion_list': inspeccion_list,
+        'desde': desde,
+        'hasta': hasta,
+
+    }
+
     #inspeccion_list = Inspeccion.objects.all()
-    return render(request, 'reporte_inspecciones.html', {'inspeccion_list': inspeccion_list, })
+    return render(request, 'reporte_inspecciones.html', context)
 
 
 class ModificarInspeccion(SuccessMessageMixin, UpdateView):
@@ -416,7 +429,7 @@ def reporte_bitacora(request):
         if request.POST.get('fecha_desde'):
             desde = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%d de %B de %Y")
         else:
-            desde = "el origen de los tiempos"
+            desde = "Inicio de Transacciones"
         fecha_hasta = request.POST.get('fecha_hasta')
     else:
         g = True
@@ -442,6 +455,8 @@ def reporte_bitacora(request):
 
     context = {
         'acciones': acciones,
+        'desde': desde,
+        'hasta': hasta,
 
     }
 
