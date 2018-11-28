@@ -21,4 +21,7 @@ urlpatterns = [
     url(r'^inspecciones/$', consultarInspecciones, name='consultarInspecciones'),
     url(r'^reporte_inspecciones/$', reporteInspecciones, name='reporteInspecciones'),
     url(r'^actualizar_inspeccion/(?P<pk>\d+)$', ModificarInspeccion.as_view(),name='InspeccionUpdate'),
+
+    url(r'^reporte_acciones_correctivas/$', reporteAccionesCorrectivas, name='reporteAccionesCorrectivas'),
+    url(r'^reporte_cumplimiento/$', reporteCumplimiento, name='reporteCumplimiento'),
 ]

@@ -471,3 +471,86 @@ def reporte_conexion(request):
 
     return render(request, 'reporte_conexiones.html', context)
 
+
+@login_required
+def reporteAccionesCorrectivas(request):
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+
+    #Captura y validacion de parametros
+
+    if request.method == 'POST':
+        parametros = False
+        if request.POST.get('fecha_desde'):
+            desde = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%d de %B de %Y")
+        else:
+            desde = "Inicio de registro acciones"
+            fecha_hasta = request.POST.get('fecha_hasta')
+    else:
+        parametros = True
+        fecha_desde = (datetime.date.today() - timedelta(datetime.date.today().day - 1)).strftime("%Y-%m-%d")
+        desde = (datetime.date.today() - timedelta(datetime.date.today().day - 1)).strftime("%d de %B de %Y")
+    try:
+        hasta = datetime.datetime.strptime(fecha_hasta, '%d/%m/%Y').strftime("%d de %B de %Y")
+    except:
+        hasta = datetime.date.today().strftime("%d de %B de %Y")
+
+    # Realizacion de consultas a base de datos
+    acciones_corr_list = Acciones.objects.all()
+    if parametros:
+        cumplimiento_list = acciones_corr_list.filter(fecha__gte=fecha_desde)
+    if request.POST.get('fecha_desde'):
+        a = request.POST.get('fecha_desde')
+        cumplimiento_list = acciones_corr_list.filter(fecha__gte=a[6:] + "-" + a[3:5] + "-" + a[:2])
+    if request.POST.get('fecha_hasta'):
+        b = request.POST.get('fecha_hasta')
+        cumplimiento_list = acciones_corr_list.filter(fecha__lte=b[6:] + "-" + b[3:5] + "-" + b[:2])
+
+    context = {
+        'acciones_corr_list': inspeccion_list,
+        'desde': desde,
+        'hasta': hasta,
+    }
+
+    return render(request, 'reporte_acciones_correctivas.html', context)
+
+@login_required
+def reporteCumplimiento(request):
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+
+    #Captura y validacion de parametros
+
+    if request.method == 'POST':
+        parametros = False
+        if request.POST.get('fecha_desde'):
+            desde = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%d de %B de %Y")
+        else:
+            desde = "Inicio de mes"
+            fecha_hasta = request.POST.get('fecha_hasta')
+    else:
+        parametros = True
+        fecha_desde = (datetime.date.today() - timedelta(datetime.date.today().day - 1)).strftime("%Y-%m-%d")
+        desde = (datetime.date.today() - timedelta(datetime.date.today().day - 1)).strftime("%d de %B de %Y")
+    try:
+        hasta = datetime.datetime.strptime(fecha_hasta, '%d/%m/%Y').strftime("%d de %B de %Y")
+    except:
+        hasta = datetime.date.today().strftime("%d de %B de %Y")
+
+    # Realizacion de consultas a base de datos
+    cumplimiento_list = Cumplimientos.objects.all()
+    if parametros:
+        cumplimiento_list = cumplimiento_list.filter(fecha__gte=fecha_desde)
+    if request.POST.get('fecha_desde'):
+        a = request.POST.get('fecha_desde')
+        cumplimiento_list = cumplimiento_list.filter(fecha__gte=a[6:] + "-" + a[3:5] + "-" + a[:2])
+    if request.POST.get('fecha_hasta'):
+        b = request.POST.get('fecha_hasta')
+        cumplimiento_list = cumplimiento_list.filter(fecha__lte=b[6:] + "-" + b[3:5] + "-" + b[:2])
+
+    context = {
+        'cumplimiento_list': inspeccion_list,
+        'desde': desde,
+        'hasta': hasta,
+    }
+
+    
+    return render(request, 'reporte_cumplimiento.html', context)
